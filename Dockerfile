@@ -28,7 +28,11 @@ RUN composer install --optimize-autoloader --no-dev --no-scripts
 # Copy application files
 COPY . .
 
-# Run Laravel setup
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Run Laravel setup (config cache only, not migrations)
 RUN php artisan config:cache && \
     php artisan route:cache
 
@@ -51,5 +55,5 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Expose port
 EXPOSE 8080
 
-# Start supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Set entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
