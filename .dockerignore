@@ -1,0 +1,9 @@
+.dockerignore
+.git
+.gitignore
+.env.local
+node_modules
+vendor
+storage/logs
+storage/framework/cache
+.vscode
