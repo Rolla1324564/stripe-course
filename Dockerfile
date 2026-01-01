@@ -38,8 +38,9 @@ RUN chmod -R 775 storage bootstrap/cache
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Create .env file if not exists
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+# Create .env file from example and generate APP_KEY
+RUN cp .env.example .env
+RUN php artisan key:generate --force
 
 # Configure Apache virtual host
 RUN cat > /etc/apache2/sites-available/000-default.conf << 'EOF'
