@@ -39,8 +39,11 @@ COPY nginx.conf /etc/nginx/nginx.conf
 RUN npm install && npm run build
 
 # Create necessary directories
-RUN mkdir -p storage/logs && \
-    chmod -R 775 storage bootstrap/cache
+RUN mkdir -p storage/logs bootstrap/cache \
+    && mkdir -p /var/log/supervisor \
+    && mkdir -p /var/run/supervisor \
+    && mkdir -p /etc/supervisor/conf.d \
+    && chmod -R 775 storage bootstrap/cache
 
 # Copy supervisor configuration
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
