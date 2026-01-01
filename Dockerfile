@@ -4,12 +4,14 @@ FROM php:8.2-fpm-alpine
 RUN apk add --no-cache \
     nginx \
     postgresql-client \
+    postgresql-dev \
     git \
     curl \
     unzip \
     npm \
     supervisor \
-    && docker-php-ext-install pdo pdo_pgsql
+    && docker-php-ext-install pdo pdo_pgsql \
+    && apk del postgresql-dev
 
 # Set working directory
 WORKDIR /var/www/html
