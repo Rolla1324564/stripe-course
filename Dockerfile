@@ -2,14 +2,12 @@ FROM php:8.2-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
-    nginx \
     postgresql-client \
     postgresql-dev \
     git \
     curl \
     unzip \
     npm \
-    supervisor \
     && docker-php-ext-install pdo pdo_pgsql \
     && apk del postgresql-dev
 
@@ -32,25 +30,12 @@ COPY . .
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Run Laravel setup (config cache only, not migrations)
-RUN php artisan config:cache && \
-    php artisan route:cache
-
-# Copy Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
 # Install Node dependencies and build assets
 RUN npm install && npm run build
 
 # Create necessary directories
 RUN mkdir -p storage/logs bootstrap/cache \
-    && mkdir -p /var/log/supervisor \
-    && mkdir -p /var/run/supervisor \
-    && mkdir -p /etc/supervisor/conf.d \
     && chmod -R 775 storage bootstrap/cache
-
-# Copy supervisor configuration
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose port
 EXPOSE 8080

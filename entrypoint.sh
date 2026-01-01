@@ -7,5 +7,5 @@ sleep 10
 echo "Running migrations..."
 php artisan migrate --force
 
-echo "Starting application..."
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+echo "Starting Laravel application on port 8080..."
+php artisan serve --host=0.0.0.0 --port=8080
