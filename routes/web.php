@@ -5,6 +5,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\SyncController;
 
 // Home page - redirect to courses
 Route::redirect('/', '/courses');
@@ -20,6 +21,22 @@ Route::prefix('/api/export')->group(function () {
     Route::get('/all', [ExportController::class, 'getAllDataJson']);
     Route::get('/courses-csv', [ExportController::class, 'exportCoursesCsv']);
     Route::get('/orders-csv', [ExportController::class, 'exportOrdersCsv']);
+});
+
+// ============================================
+// 🔄 Data Sync APIs (Localhost ↔ Render)
+// ============================================
+Route::prefix('/api/sync')->group(function () {
+    Route::post('/push', [SyncController::class, 'pushToRender'])
+        ->name('sync.push');
+    Route::get('/pull', [SyncController::class, 'pullFromRender'])
+        ->name('sync.pull');
+    Route::get('/status', [SyncController::class, 'status'])
+        ->name('sync.status');
+    Route::post('/delete-all', [SyncController::class, 'deleteAll'])
+        ->name('sync.delete');
+    Route::post('/reset-seed', [SyncController::class, 'resetAndSeed'])
+        ->name('sync.reset');
 });
 
 // Database Viewer Dashboard (public access)
