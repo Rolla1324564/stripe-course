@@ -26,7 +26,7 @@ Route::prefix('/api/export')->group(function () {
 // ============================================
 // 🔄 Data Sync APIs (Localhost ↔ Render)
 // ============================================
-Route::prefix('/api/sync')->withoutMiddleware('web')->group(function () {
+Route::prefix('/api/sync')->middleware('api')->group(function () {
     Route::post('/push', [SyncController::class, 'pushToRender'])
         ->name('sync.push');
     Route::get('/pull', [SyncController::class, 'pullFromRender'])
