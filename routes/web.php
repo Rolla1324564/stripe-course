@@ -4,9 +4,26 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ExportController;
 
 // Home page - redirect to courses
 Route::redirect('/', '/courses');
+
+// ============================================
+// 📊 Database Export APIs
+// ============================================
+Route::prefix('/api/export')->group(function () {
+    Route::get('/courses', [ExportController::class, 'exportCoursesJson']);
+    Route::get('/orders', [ExportController::class, 'exportOrdersJson']);
+    Route::get('/payments', [ExportController::class, 'exportPaymentsJson']);
+    Route::get('/users', [ExportController::class, 'exportUsersJson']);
+    Route::get('/all', [ExportController::class, 'getAllDataJson']);
+    Route::get('/courses-csv', [ExportController::class, 'exportCoursesCsv']);
+    Route::get('/orders-csv', [ExportController::class, 'exportOrdersCsv']);
+});
+
+// Database Viewer Dashboard (public access)
+Route::get('/database', [ExportController::class, 'viewDatabase']);
 
 // Course Routes
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
